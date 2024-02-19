@@ -1,10 +1,8 @@
-from logging import getLogger
-
 import pymongo
+from loguru import logger
 
 from db_utils.default_db_config import DEFAULT_DB_CONFIG_REMOTE
 
-logger = getLogger(__name__)
 
 
 class BaseMongoDBConnector:

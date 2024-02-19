@@ -1,13 +1,12 @@
-from logging import getLogger
 from typing import List
 
 import pymongo
+from loguru import logger
 
 from data_classes.table_document import TableDocument
 from db_utils.default_db_config import DEFAULT_DB_CONFIG_REMOTE
 from db_utils.base_mongo_db_connector import BaseMongoDBConnector
 
-logger = getLogger(__name__)
 
 
 class MongoDBTablesConnector(BaseMongoDBConnector):

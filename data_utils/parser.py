@@ -2,13 +2,13 @@ import datetime
 import inspect
 import re
 from collections import defaultdict
-from logging import getLogger, Logger
 from pathlib import Path
 from typing import List, Optional
 
 import pycountry
 from bs4 import BeautifulSoup
 from dateutil.parser import parse, ParserError
+from loguru import logger
 
 from data_classes.discrepancy import Discrepancy, DiscrepancyType
 from data_classes.table_document import TableDocument
@@ -19,7 +19,6 @@ from db_utils.mongo_db_tables_connector import MongoDBTablesConnector
 
 VALID_FILE_TYPES = [".html", ".htm"]
 
-logger: Logger = getLogger(__name__)
 
 
 class Parser:
