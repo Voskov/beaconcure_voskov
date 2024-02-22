@@ -1,6 +1,5 @@
 import pytest
 
-from db_utils.default_db_config import DEFAULT_DB_CONFIG_LOCAL
 from db_utils.validation_connector import ValidationConnector
 
 
@@ -8,7 +7,7 @@ class TestDedicatedConnector:
     class TestDBConnectorFunctionality:
         @pytest.fixture(autouse=True)
         def setup(self):
-            self.connector = ValidationConnector(**DEFAULT_DB_CONFIG_LOCAL)
+            self.connector = ValidationConnector.get_local_connector()
 
         @pytest.mark.parametrize("length, expected", [(22, 3), (33, 7), (44, 16)])
         def test_find_short_headers(self, length, expected):

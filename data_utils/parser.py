@@ -25,8 +25,9 @@ class Parser:
     def __init__(self):
         self.all_discrepancies = defaultdict(list)
         self.file_discrepancies = []
-        self.tables_db_client = MongoDBTablesConnector(**DEFAULT_DB_CONFIG_LOCAL)
-        self.discrepancies_db_client = DiscrepancyDBConnector(**DISCREPANCIES_DB_CONFIG_LOCAL)
+
+        self.tables_db_client = MongoDBTablesConnector.get_local_connector()
+        self.discrepancies_db_client = DiscrepancyDBConnector.get_local_connector()
 
     def parse(self, path_str: str):
         path = Path(path_str)

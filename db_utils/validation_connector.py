@@ -1,4 +1,6 @@
 from dateutil.parser import parse
+
+from db_utils.config_loader import load_local_env_config
 from db_utils.mongo_db_tables_connector import MongoDBTablesConnector
 
 
@@ -9,6 +11,14 @@ class ValidationConnector(MongoDBTablesConnector):
         self.__dict__ = self._shared_state
         if not self._shared_state:
             super().__init__(host, port, db_name, collection_name, username, password)
+
+    @staticmethod
+    def get_local_connector():
+        local_env_conf = load_local_env_config()
+        return ValidationConnector(host=local_env_conf['HOST'],
+                                   port=int(local_env_conf['PORT']),
+                                   db_name=local_env_conf['TABLES_DB_NAME'],
+                                   collection_name=local_env_conf['TABLES_COLLECTION_NAME'])
 
     def find_short_headers(self, length: int):
         '''

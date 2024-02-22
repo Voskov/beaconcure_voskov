@@ -1,12 +1,12 @@
-from typing import List
+from typing import List, Any
 
 import pymongo
 from loguru import logger
 
 from data_classes.table_document import TableDocument
-from db_utils.default_db_config import DEFAULT_DB_CONFIG_REMOTE
 from db_utils.base_mongo_db_connector import BaseMongoDBConnector
-
+from db_utils.config_loader import load_local_env_config
+from db_utils.default_db_config import DEFAULT_DB_CONFIG_REMOTE
 
 
 class MongoDBTablesConnector(BaseMongoDBConnector):
@@ -17,27 +17,21 @@ class MongoDBTablesConnector(BaseMongoDBConnector):
     But I've decided so skip this step for now, as it's not necessary for the current project.
     It is a singleton class, meaning that it will only create one instance of the class and share it across all instances of the class.
     """
-    _shared_state = {}
+    _shared_state: dict[Any, Any] = {}
 
     def __init__(self, host=None, port=None, db_name=None, collection_name=None, username=None, password=None):
         # simple singleton implementation
         self.__dict__ = self._shared_state
         if not self._shared_state:
-            # defaulting to the default db config
-            if not all([host, port, db_name, collection_name]):
-                if any([host, port, db_name, collection_name]):
-                    logger.warning("Incomplete db config, using default db config")
-                else:
-                    logger.info("No db config provided, using default db config")
+            super().__init__(host, port, db_name, collection_name, username, password)
 
-                host = DEFAULT_DB_CONFIG_REMOTE['hostname']
-                port = DEFAULT_DB_CONFIG_REMOTE['port']
-                db_name = DEFAULT_DB_CONFIG_REMOTE['db_name']
-                collection_name = DEFAULT_DB_CONFIG_REMOTE['collection_name']
-
-            self.client = pymongo.MongoClient(host, port, username=username, password=password)
-            self.db = self.client[db_name]
-            self.collection = self.db[collection_name]
+    @staticmethod
+    def get_local_connector():
+        local_env_conf = load_local_env_config()
+        return MongoDBTablesConnector(host=local_env_conf['HOST'],
+                                      port=int(local_env_conf['PORT']),
+                                      db_name=local_env_conf['TABLES_DB_NAME'],
+                                      collection_name=local_env_conf['TABLES_COLLECTION_NAME'])
 
     def insert(self, table_document: TableDocument):
         self.collection.insert_one(table_document.dict())

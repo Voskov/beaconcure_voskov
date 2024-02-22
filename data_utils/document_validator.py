@@ -14,9 +14,9 @@ class DocumentValidator:
         self.max_headers_length = max_headers_length
         self.late_date = late_date
         self.high_sum = high_sum
-        self.validation_connector = ValidationConnector(**DEFAULT_DB_CONFIG_LOCAL)
-        self.discrepancies_connector = DiscrepancyDBConnector(**DISCREPANCIES_DB_CONFIG_LOCAL)
-        self.all_discrepancies = []
+        self.validation_connector = ValidationConnector.get_local_connector()
+        self.discrepancies_connector = DiscrepancyDBConnector.get_local_connector()
+        self.all_discrepancies: list[tuple[ValidationStatus, dict]] = []
 
     def validate(self):
         # so... I'm not sure whether I should iterate over ALL the saved documents, look for predefined issues
