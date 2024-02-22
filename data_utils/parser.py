@@ -20,7 +20,6 @@ from db_utils.mongo_db_tables_connector import MongoDBTablesConnector
 VALID_FILE_TYPES = [".html", ".htm"]
 
 
-
 class Parser:
     def __init__(self):
         self.all_discrepancies = defaultdict(list)
@@ -28,6 +27,9 @@ class Parser:
 
         self.tables_db_client = MongoDBTablesConnector.get_local_connector()
         self.discrepancies_db_client = DiscrepancyDBConnector.get_local_connector()
+
+    def main(self):
+        self.parse('../documents/')
 
     def parse(self, path_str: str):
         path = Path(path_str)
@@ -284,4 +286,4 @@ class Parser:
 
 if __name__ == '__main__':
     parser = Parser()
-    parser.parse('../documents/')
+    parser.main()

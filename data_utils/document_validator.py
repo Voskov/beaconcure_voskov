@@ -18,6 +18,9 @@ class DocumentValidator:
         self.discrepancies_connector = DiscrepancyDBConnector.get_local_connector()
         self.all_discrepancies: list[tuple[ValidationStatus, dict]] = []
 
+    def main(self):
+        self.validate()
+
     def validate(self):
         # so... I'm not sure whether I should iterate over ALL the saved documents, look for predefined issues
         # should this method receive a document and validate it, or just... run and look for issues.
@@ -74,4 +77,5 @@ class DocumentValidator:
 
 if __name__ == "__main__":
     dv = DocumentValidator(max_headers_length=22, late_date="2020-01-01", high_sum=1000)
+    dv.main()
     dv.validate()
